@@ -7,10 +7,11 @@ import utils.PlayListInterface;
 // stiamo realizzando una lista di elementi
 // incapsuliamo i "nodi" o "capsule" della lista
 // l'insieme di capsule può essere vista solo dalla classe PlayList
+// esempio di linked list
 public class PlayList<T> implements PlayListInterface<T> {
     private class Node<T> {
         private T data; //abbiamo il dato
-        private Node<T> next; // riferimento all'elemento successivo
+        private Node<T> next; // riferimento all'elemento successivo (nodo successivo). puntatore ad un altro nodo
 
         public Node(T data) {
             this.data = data;
@@ -35,12 +36,12 @@ public class PlayList<T> implements PlayListInterface<T> {
     }
     // attributi della playlist
     private int size;
-    private Node<T> head;
-    private Node<T> tail;
-    public Playlist(){
+    private Node<T> head; //primo nodo della linked list
+    private Node<T> tail; //ultimo nodo della linked list
+    public PlayList(){
         this.size = 0;
         this.head = null;
-        this.tail = null;
+        this.tail = null; // tail non viene mai aggiornato??
     }
 
     // aggiunta di un elemento
@@ -54,6 +55,7 @@ public class PlayList<T> implements PlayListInterface<T> {
             head=newNode;
         }
         tail.setNext(newNode);
+        tail = newNode; //modifica effettuata da me
         size++;
     }
 
@@ -63,12 +65,12 @@ public class PlayList<T> implements PlayListInterface<T> {
     public T remove(T t) {
         Node<T> cursore = head;
         Node<T> prev = null;
-        while(!cursore.getData().equals(t) || cursore.getNext() != null ) { // non dovrebbe essere != ??
+        while(!cursore.getData().equals(t) && cursore.getNext() != null ) { // non dovrebbe essere != ?? cambiato la logica da or a &&
             prev = cursore;
             cursore = cursore.getNext();
 
         }
-        // if cursore.getNext() == null -> Exception
+        // if cursore.getNext() == null -> Exception da implementare
         prev.setNext(cursore.getNext());
         size--;
         return cursore.getData();

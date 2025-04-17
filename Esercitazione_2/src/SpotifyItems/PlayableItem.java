@@ -28,7 +28,7 @@ public class PlayableItem {
         this.timeLength = timeLength;
         this.artist = artist;
         currentTime = 0;
-        this.publicationDate = new Date(publicationYear, publicationMonth, publicationDay);
+        this.publicationDate = new Date(publicationYear, publicationMonth, publicationDay); //deprecated
         this.trackAudioPath = trackAudioPath; //dovrebbe essere un file
     }
     // getters
