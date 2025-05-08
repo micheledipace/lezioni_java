@@ -1,6 +1,7 @@
 package SpotifyItems;
 
 import utils.EmptyPlayListException;
+import utils.ItemAlreadyExistsException;
 import utils.PlayListInterface;
 
 import java.util.EmptyStackException;
@@ -56,19 +57,31 @@ public class PlayList<T> implements PlayListInterface<T> {
 
 
      @Override
-    public void add(T t) { // puó ricevere solamente PlayableItem e per un casting per estensione possiamo avere anche elementi eterogenei nella lista (hanno in comune la classe PlayableItem)
+public void     add(T t)  { // puó ricevere solamente PlayableItem e per un casting per estensione possiamo avere anche elementi eterogenei nella lista (hanno in comune la classe PlayableItem)
 
         Node<T> newNode = new Node<>(t);
         if (size == 0) {
             head = newNode;
-        } else { //Per addFirst
+            tail = newNode;
+            head.setNext(null);
+        }
+        if (this.search(newNode.getData()) == -1) {
+            newNode.setNext(null);
+            tail.setNext(newNode);
+            tail = newNode;
+        }
+        else {
+            System.out.println("Item already exists!");
+
+        }
+        // { //Per addFirst
             // newNode.setnext(head);
             //head = newNode;
             // addLast:
-            tail.setNext(newNode);
-        }
+            //tail.setNext(newNode);
+        //}
 
-        tail = newNode;
+
         size++;
     }
 

@@ -4,14 +4,16 @@ import SpotifyItems.PlayList;
 import SpotifyItems.PlayableItem;
 import utils.AccountType;
 
+import java.util.Date;
+
 public class Account extends Person{
     private String email;
     private String password;
     private AccountType accountType;
     private PlayList<PlayableItem> playlist; // elemento principale sia per gli account premium che per gli account free
 
-    public Account(){
-        super();
+    public Account(String name, String surname, Date birthday, String code){
+        super( name,  surname,  birthday,  code);
         email = "Default email";
         password = "Default password";
         accountType = AccountType.FREE;
