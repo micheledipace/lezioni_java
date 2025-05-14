@@ -63,12 +63,12 @@ public class PlayableItem {
     @Override
     public String toString() {
         return "Title :" + title +
-                "\nTime Length=" + timeLength +
-                "\nCurrent Time=" + currentTime +
-                "\n artist='" + artist + '\'' +
-                ", publicationDate=" + publicationDate +
-                ", trackAudioPath='" + trackAudioPath + '\'' +
-                '}';
+                "\nTime Length : " + timeLength +
+                "\nCurrent Time : " + currentTime +
+                "\n Artist : " + artist +
+                "\n Publication Date : " + publicationDate.toString() +
+                "\n Track Audio Path : " + trackAudioPath
+                ;
     }
 
     @Override

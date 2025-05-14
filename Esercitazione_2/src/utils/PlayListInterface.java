@@ -5,7 +5,7 @@ import java.util.EmptyStackException;
 // inseriremo solo i metodi di una playlist, che potrà contenere oggetti differenti (e.g playlist di video, playlist di podcast, playlist di brani)
 // utilizzeremo i generics
 public interface PlayListInterface<T> {
-    public void add (T t);
+    public void add (T t) ;
 
     public T remove(T t) throws EmptyPlayListException;
 
