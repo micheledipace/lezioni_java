@@ -84,6 +84,7 @@ public class Seller extends Person implements Operations{
                System.out.println("\n 2- Rimuovi prodotto");
                System.out.println("\n 3- Visualizza vendite");
                System.out.println("\n 4- Logout");
+               option = input.nextInt();
            }
            switch (option){
                case 1:
@@ -105,9 +106,9 @@ public class Seller extends Person implements Operations{
         Scanner input = new Scanner(System.in);
         System.out.println("Inserisci il nome del prodotto");
        name = input.next();
-        System.out.println("Inserisci il nome del prodotto");
+        System.out.println("Inserisci l'ID del prodotto");
         id = input.next();
-        System.out.println("Inserisci il nome del prodotto");
+        System.out.println("Inserisci il prezzo del prodotto");
         price = input.nextDouble();
         return new Product(name, id, price);
 }}

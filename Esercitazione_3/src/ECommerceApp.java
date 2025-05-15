@@ -11,20 +11,20 @@ public class ECommerceApp {
     }
 
     public String gatherProducts(){
-        String products = "";
+        StringBuilder products = new StringBuilder();
         for (Seller v: sellers){
-            v.getProduct(); //gestire il caso in cui il prodotto è null.
+            //v.getProduct(); //gestire il caso in cui il prodotto è null.
             if (v.getProduct() != null) {
 
 
-                products += v.getProduct();
+                products.append(v.getProduct());
             }
             else {
-                products += "Il venditore: " + v.getAccountName() + "non ha prodotti in vendita ";
+                products.append("Il venditore: ").append(v.getAccountName()).append("non ha prodotti in vendita ");
             }
 
         }
-        return products;
+        return products.toString();
     }
 
     public Product findProduct(String id) {

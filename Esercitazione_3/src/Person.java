@@ -21,8 +21,8 @@ public class Person {
     public String toString() {
         String tmp = "";
         switch (accountType) {
-            case CLIENTE -> tmp += "Cliente";
-            case VENDITORE -> tmp += "Seller";
+            case CUSTOMER -> tmp += "Cliente";
+            case SELLER -> tmp += "Seller";
         }
 
         return "Person{\n" +

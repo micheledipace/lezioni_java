@@ -13,6 +13,10 @@ public class Product {
         return id;
     }
 
+    public Double getPrice() {
+        return price;
+    }
+
     @Override
     public String toString() {
         return "Product{\n" +
