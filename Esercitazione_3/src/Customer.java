@@ -1,4 +1,6 @@
 import utils.AccountType;
+import utils.EmptyBasketException;
+import utils.InsufficientBalanceException;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -6,16 +8,20 @@ import java.util.Scanner;
 
 
 
-    public class Customer extends Person implements Operations {
+public class Customer extends Person implements Operations {
         private String accountName;
         private double balance;
         private ArrayList<Product> basket;
 
-        Customer(String name, String cf, AccountType accountType, String accountName, double balance) {
-            super(name, cf, accountType.CUSTOMER);
+        Customer(String name, String cf,  String accountName, double balance) {
+            super(name, cf, AccountType.CUSTOMER);
             this.accountName = accountName;
             this.balance = balance;
             basket = new ArrayList<>();
+        }
+
+        public void setBalance(double balance) {
+            this.balance = balance;
         }
 
         public String getAccountName() {
@@ -30,69 +36,95 @@ import java.util.Scanner;
             return basket.remove(0);
         }
 
-        public void buyProduct() {
+
+
+        private double basketPrice() {
+            double sum = 0.0;
+            for (Product p : this.basket) {
+                sum += p.getPrice();
+            }
+            return sum;
+
+
+        }
+        public void buyProduct(ECommerceApp eCommerceApp) throws EmptyBasketException, InsufficientBalanceException {
             //check carrello non vuoto
-            if (basket.get(0).getPrice() < balance){
-                balance = basket.get(0).getPrice()- balance;
+            if (basket.isEmpty()){
+                throw new EmptyBasketException("Il carrello é vuoto!");
+            }
+            double checkoutPrice = basketPrice();
+            if (checkoutPrice < balance){
+
                 System.out.println("La transazione é avvenuta con successo");
                 while (!basket.isEmpty()) {
-                    basket.remove(0);
+                    // per ogni vendita di un prodotto andremo ad informare l'eCommerceApp della vendita avvenuta, aggiornando le statistiche
+                    eCommerceApp.sellProduct(removeProduct());
                 }
+                balance = checkoutPrice - balance;
             }else {
-                System.out.println("Non hai a disposizione credito sufficiente "  + balance);
+                throw new InsufficientBalanceException("Credito non sufficiente! \n Saldo inferiore di: " + (checkoutPrice - balance) + "$");
                 //il cliente puó voler aumentare il credito o rimuovere il prodotto
+
             }
             //check balance sufficiente
 
         }
-
-        public Product buildProduct() {
-            String name;
-            String id;
-            double price;
-            Scanner input = new Scanner(System.in);
-            System.out.println("Inserisci il nome del prodotto");
-            name = input.next();
-            System.out.println("Inserisci il nome del prodotto");
-            id = input.next();
-            System.out.println("Inserisci il nome del prodotto");
-            price = input.nextDouble();
-            return new Product(name, id, price);
-        }
-
-        public void menu() {
+        public void menu(ECommerceApp eCommerceApp) {
             Scanner input = new Scanner(System.in);
             int option;
-            while (true) {
-                System.out.println("Menu Cliente");
-                System.out.println("\n 1- Aggiungi prodotto");
-                System.out.println("\n 2- Rimuovi prodotto");
-                System.out.println("\n 3- Compra prodotto");
-                System.out.println("\n 4- Logout");
-                option = input.nextInt();
-                while (option < 1 || option > 4) {
+            while (true) { // ciclo do while
+                do {
                     System.out.println("Menu Cliente");
-                    System.out.println("\n 1- Aggiungi prodotto");
-                    System.out.println("\n 2- Rimuovi prodotto");
+                    System.out.println("\n 1- Aggiungi prodotto al carrello");
+                    System.out.println("\n 2- Visualizza prodotti");
                     System.out.println("\n 3- Compra prodotto");
-                    System.out.println("\n 4- Logout");
-                }
+                    System.out.println("\n 4- Aggiorna saldo");
+                    System.out.println("\n 5- Logout");
+                    option = input.nextInt();
+                } while (option < 1 || option > 5);
                 switch (option) {
                     case 1:
-                        addProduct(buildProduct());
+                        String id = input.next();
+                        Product tmp =
+                                eCommerceApp.findProduct(id);
+                        if (tmp != null){
+                            addProduct(tmp);
+                        }
+                        else {
+                            System.out.println("Prodotto non valido!");
+                        }
+                        break;
                     case 2:
-                        System.out.println("Ho rimosso il prodotto" + removeProduct());
+                        seeProducts(eCommerceApp);
+                        break;
                     case 3:
                         System.out.println(this);
-
-                        buyProduct();
+                        try {
+                        buyProduct(eCommerceApp);} catch (EmptyBasketException | InsufficientBalanceException e) {
+                            System.out.println(e.getMessage());
+                        }
+                        break;
                     case 4:
+                        System.out.println("Inserisci il valore da caricare");
+                        double newBalance = new Scanner(System.in).nextDouble();
+                        setBalance(newBalance);
+                        break;
+                    case 5:
                         return; // solo con il logout terminerò il menù del venditore
                 }
             }
 
         }
 
+        public void seeProducts(ECommerceApp eCommerceApp){
+            System.out.println("Prodotti disponibili : \n");
+            System.out.println(eCommerceApp.gatherProducts());
+        }
+
+
+
+
+// getProducts
         @Override
         public String toString() {
             String tmp = "[\n";
@@ -101,8 +133,8 @@ import java.util.Scanner;
                 Iterator<Product> i = basket.iterator();
                 if (!i.hasNext()) {
                     tmp += p + "]";
-                }
-                tmp += p + ", ";
+                }else{
+                tmp += p + ", ";}
                 return "Customer{\n" + super.toString() + "\n" +
                         "\taccountName: " + accountName + "\n" +
                         "\tbalance: " + balance +
@@ -111,6 +143,7 @@ import java.util.Scanner;
             return tmp;
         }
     }
+
 
 
 

@@ -1,3 +1,5 @@
+import java.util.Scanner;
+
 public class Product {
     private String name;
     private String id;
@@ -16,6 +18,23 @@ public class Product {
     public Double getPrice() {
         return price;
     }
+
+
+    public static Product buildProduct() {
+        String name;
+        String id;
+        double price;
+        Scanner input = new Scanner(System.in);
+        System.out.println("Inserisci il nome del prodotto");
+        name = input.next();
+        System.out.println("Inserisci il codice del prodotto");
+        id = input.next();
+        System.out.println("Inserisci il prezzo del prodotto");
+        price = input.nextDouble();
+        return new Product(name, id, price);
+    }
+
+
 
     @Override
     public String toString() {
