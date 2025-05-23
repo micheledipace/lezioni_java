@@ -21,18 +21,20 @@ public class Board {
     //bisogna gestire accuratamente l'input del giocatore per evitare OutOfBoundsExceptions
     public boolean makeMove(int row, int column, boolean player, boolean clean) {
         // verifichiamo che la posizione non sia già occupata
-        if (board[row][column] != 0) {
-            return false; //il return rende inutile un qualsiasi blocco else
+        if (clean) {
+            board[row][column] = 0;
         }
-        if (!clean) {
+        else {
             //scegliamo che sia il giocatore ad iniziare per primo
+
+            if (board[row][column] != 0) {
+                return false; //il return rende inutile un qualsiasi blocco else
+            }
             if (player) {
                 board[row][column] = 1;
-            } else {
+            }else {
                 board[row][column] = -1;
             }
-        } else {
-            board[row][column] = 0;
         }
         return true;
     }
@@ -46,9 +48,9 @@ public class Board {
             case -3 -> {
                 return 10;
             }
-            default -> sumMove = 0;
+            default -> {return  0;}
         }
-        return sumMove;
+
     }
 
 
@@ -65,8 +67,9 @@ public class Board {
             }
 
             status = evaluateStatus(trisRow);
-            trisRow = 0;
             if (status != 0) return status;
+            trisRow = 0;
+
             status = evaluateStatus(trisColumn);
             if (status != 0) return status;
             trisColumn = 0;
@@ -75,7 +78,7 @@ public class Board {
         }
         status = evaluateStatus(trisDiagonale1);
         if (status != 0) return status;
-        status = evaluateStatus(trisDiagonale1);
+        status = evaluateStatus(trisDiagonale2);
         if (status != 0) return status;
         return status; //non ho ottenuto nessun esito favorevole ai due giocatori
     }
@@ -118,8 +121,9 @@ public class Board {
                 } else {
                     tmp += " ";
                 }
-                tmp += "\n----\n";
+
             }
+            tmp += "\n----\n";
         }
         return tmp;
     }

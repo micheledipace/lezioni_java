@@ -1,5 +1,5 @@
 public class Computer {
-    private int difficulty = 100;
+    private int difficulty;
 
     public Computer(int difficulty) {
         this.difficulty = difficulty;
@@ -14,20 +14,24 @@ public class Computer {
         if (currentDepth == difficulty || board.checkStatus() != 0 || board.checkAvailableMoves() == 0) {
             return board.checkStatus();
         }
-        int status = 0;
+        int status;
         //ricorsioni alternative
         //il computer dovrà scegliere la mossa con utilità massima, scartando le altre
         //dobbiamo effettuare un controllo per verificare che utilità ha una mossa
         if (max) {
-            status = -100; // il "maximizer" cercherà di aggiornare l'esito al valore più grande possibile
+            status = 10; // il "maximizer" cercherà di aggiornare l'esito al valore più grande possibile
             for (int i = 0; i < board.getBOARD_WIDTH(); i++) {
                 for (int j = 0; j < board.getBOARD_WIDTH(); j++ ) {
                     if (board.makeMove(i, j, false, false)) {
                         int tmp = minMax(board, false, currentDepth + 1); //dobbiamo calcolare se l'esito è minore o maggiore di quello di partenza
-                        if (tmp >= status) {
+                        if (tmp > status) {
                             status = tmp;
                         }
-                        board.makeMove(i, j, false, true);
+
+
+                            board.makeMove(i, j, false, true);
+
+
                     }
                 }
 
@@ -37,16 +41,21 @@ public class Computer {
 
         //nell'algoritmo "minimizer" il computer indosserà le vesti del giocatore
         else {
-            status = -100;
+            status = -10;
             for (int i = 0; i < board.getBOARD_WIDTH(); i++ ) {
                 for (int j = 0; j < board.getBOARD_WIDTH(); j++ ) {
                     if (board.makeMove(i, j, true, false)) {
                         int tmp = minMax(board, true, currentDepth + 1);
-                        if (tmp <= status) {
+                        if (tmp < status) {
                             status = tmp;
                         }
-                        board.makeMove(i, j, false, true);
+
+
+                            board.makeMove(i, j, false, true);
+
+
                     }
+
                 }
 
             }
@@ -64,20 +73,21 @@ public class Computer {
 
 
         int[] bestMove = new int[2];
-        int status = -100;
+        int status = -10;
 
         for (int i = 0; i < board.getBOARD_WIDTH(); i++  ) {
             for (int j = 0; j < board.getBOARD_WIDTH(); j++) {
                 if(board.makeMove(i,j,false,false)){
-                    int tmp = minMax(board, false, 0); // la profondità è importante in un gioco come gli scacchi, in quanto la partita può raggiungere stati indeterminati (stallo)
+                    int tmp = minMax(board, false, difficulty); // la profondità è importante in un gioco come gli scacchi, in quanto la partita può raggiungere stati indeterminati (stallo)
                     if (tmp > status){
                        status = tmp;
                        bestMove[0] = i;
                        bestMove[1] = j;
                     }
-                   board.makeMove(i,j,false,true);
+                    board.makeMove(i,j,false,true);
                 }
-            }
+                }
+
         }
         return bestMove;
     }
