@@ -20,8 +20,8 @@ public class Computer {
         //dobbiamo effettuare un controllo per verificare che utilità ha una mossa
         if (max) {
             status = -100; // il "maximizer" cercherà di aggiornare l'esito al valore più grande possibile
-            for (int i = 0; i < board.getBOARD_WIDTH(); ) {
-                for (int j = 0; j < board.getBOARD_WIDTH(); ) {
+            for (int i = 0; i < board.getBOARD_WIDTH(); i++) {
+                for (int j = 0; j < board.getBOARD_WIDTH(); j++ ) {
                     if (board.makeMove(i, j, false, false)) {
                         int tmp = minMax(board, false, currentDepth + 1); //dobbiamo calcolare se l'esito è minore o maggiore di quello di partenza
                         if (tmp >= status) {
@@ -38,8 +38,8 @@ public class Computer {
         //nell'algoritmo "minimizer" il computer indosserà le vesti del giocatore
         else {
             status = -100;
-            for (int i = 0; i < board.getBOARD_WIDTH(); ) {
-                for (int j = 0; j < board.getBOARD_WIDTH(); ) {
+            for (int i = 0; i < board.getBOARD_WIDTH(); i++ ) {
+                for (int j = 0; j < board.getBOARD_WIDTH(); j++ ) {
                     if (board.makeMove(i, j, true, false)) {
                         int tmp = minMax(board, true, currentDepth + 1);
                         if (tmp <= status) {
@@ -66,8 +66,8 @@ public class Computer {
         int[] bestMove = new int[2];
         int status = -100;
 
-        for (int i = 0; i < board.getBOARD_WIDTH(); ) {
-            for (int j = 0; j < board.getBOARD_WIDTH(); ) {
+        for (int i = 0; i < board.getBOARD_WIDTH(); i++  ) {
+            for (int j = 0; j < board.getBOARD_WIDTH(); j++) {
                 if(board.makeMove(i,j,false,false)){
                     int tmp = minMax(board, false, 0); // la profondità è importante in un gioco come gli scacchi, in quanto la partita può raggiungere stati indeterminati (stallo)
                     if (tmp > status){

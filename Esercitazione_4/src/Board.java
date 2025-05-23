@@ -121,5 +121,6 @@ public class Board {
                 tmp += "\n----\n";
             }
         }
+        return tmp;
     }
 }
